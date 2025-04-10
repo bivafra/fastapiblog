@@ -15,3 +15,12 @@ ForbiddenException = HTTPException(
     detail="No permissions for query"
 )
 
+IncorrectLoginOrPasswordException = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail ="Incorrect user login or password"
+)
+
+CookieNotFound = HTTPException(
+    status_code=status.HTTP_401_UNAUTHORIZED,
+    detail="Invalid cookie"
+)

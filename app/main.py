@@ -46,10 +46,10 @@ def init_app() -> FastAPI:
         allow_headers=["*"]
     )
 
-    app.mount("/static", 
-              StaticFiles(directory="static"),
-              name="static"
-              )
+    # app.mount("/static", 
+    #           StaticFiles(directory="static"),
+    #           name="static"
+    #           )
 
     register_routers(app)
     return app

@@ -17,7 +17,7 @@ class SUserRegister(UserBase):
     @model_validator(mode="after")
     def check_password(self) -> Self:
         if self.password != self.confirm_password:
-            raise ValueError("Password mismatch")
+            raise ValueError("Passwords mismatch")
         return self
 
 
