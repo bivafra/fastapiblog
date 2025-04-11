@@ -17,8 +17,8 @@ router = APIRouter()
 async def register_user(user_data: SUserRegister,
                         session: AsyncSession = Depends(get_session_with_commit)) -> dict:
     # Check whether user already exists
-    user_dao = UsersDAO(session)
-    existing_user = await user_dao.find_one_or_none(
+    existing_user = await UsersDAO.find_one_or_none(
+        session=session,
         filters=UserBase(name=user_data.name)
     )
     if existing_user:
@@ -28,7 +28,7 @@ async def register_user(user_data: SUserRegister,
     user_data_dict = user_data.model_dump()
     user_data_dict.pop("confirm_passwrod", None)
 
-    await user_dao.add(values=SUserAddDB(**user_data_dict))
+    await UsersDAO.add(session=session, values=SUserAddDB(**user_data_dict))
 
     return {"message": "You were successfully registered"}
 
@@ -41,8 +41,8 @@ async def auth_user(
     """
     Checks correctness of entered data and set cookie for authentication
     """
-    user_dao = UsersDAO(session)
-    user = await user_dao.find_one_or_none(
+    user = await UsersDAO.find_one_or_none(
+        session=session,
         filters=UserBase(name=user_data.name)
     )
 
@@ -73,4 +73,4 @@ async def get_me(user_data: User = Depends(get_current_user)) -> SUserInfo:
 @router.get("/all_users")
 async def get_all_users(session: AsyncSession = Depends(get_session_no_commit),
                         user_data: User = Depends(get_current_admin_user)):
-    return await UsersDAO(session).find_all()
+    return await UsersDAO.find_all(session=session)
