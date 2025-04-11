@@ -9,6 +9,7 @@ from app.api.shemas import PostFullResponce
 from app.dao.base import BaseDAO
 from app.api.models import Post, Tag, PostTag
 
+
 class PostDAO(BaseDAO):
     model = Post
 
@@ -50,7 +51,6 @@ class PostDAO(BaseDAO):
                 )
             )
 
-        
         # count rows
         count_query = select(func.count()).select_from(base_query.subquery())
         number_of_rows = await session.scalar(count_query)
@@ -64,7 +64,7 @@ class PostDAO(BaseDAO):
                 "posts": []
             }
 
-        # Ceiled number of pages 
+        # Ceiled number of pages
         total_pages = (number_of_rows + page_size - 1) // page_size
 
         # Select required page
@@ -84,7 +84,9 @@ class PostDAO(BaseDAO):
             filters.append(f"tag={tag}")
         filter_str = " & ".join(filters) if filters else "no filters"
 
-        logger.info(f"Page {page} fetched with {len(posts)} posts, filters: {filter_str}")
+        logger.info(
+            f"Page {page} fetched with {
+                len(posts)} posts, filters: {filter_str}")
 
         return {
             "page": page,
@@ -94,7 +96,8 @@ class PostDAO(BaseDAO):
         }
 
     @classmethod
-    async def get_full_post_info(cls, session: AsyncSession, post_id: int, user_id: Optional[int] = None):
+    async def get_full_post_info(
+            cls, session: AsyncSession, post_id: int, user_id: Optional[int] = None):
         """
         Returns full post information.
         If post is public - info is available for all users.
@@ -104,10 +107,10 @@ class PostDAO(BaseDAO):
         query = (
             select(Post)
             .options(
-                joinedload(Post.user),  
+                joinedload(Post.user),
                 selectinload(Post.tags)
             )
-            .filter_by(id=post_id) 
+            .filter_by(id=post_id)
         )
 
         result = await session.execute(query)
@@ -130,10 +133,11 @@ class PostDAO(BaseDAO):
         return post
 
     @classmethod
-    async def change_post_status(cls, session: AsyncSession, post_id: int, new_status: str, user_id: int) -> dict:
+    async def change_post_status(
+            cls, session: AsyncSession, post_id: int, new_status: str, user_id: int) -> dict:
         """
         Changes the post's status. Available only for post's author.
-        
+
         Args:
             session: Async SQLAlchemy session
             post_id: Id of post to change
@@ -169,7 +173,8 @@ class PostDAO(BaseDAO):
                     "status": "error"
                 }
 
-            # Если текущий статус совпадает с новым, возвращаем сообщение без изменений
+            # Если текущий статус совпадает с новым, возвращаем сообщение без
+            # изменений
             if post.status == new_status:
                 return {
                     "message": f"Post already has status '{new_status}'.",
@@ -197,10 +202,11 @@ class PostDAO(BaseDAO):
             }
 
     @classmethod
-    async def delete_post(cls, session: AsyncSession, post_id: int, user_id: int) -> dict:
+    async def delete_post(cls, session: AsyncSession,
+                          post_id: int, user_id: int) -> dict:
         """
         Deletes given post. Available only for post's author.
-        
+
         Args:
             session: Async SQLAlchemy session
             post_id: Id of post to delete
@@ -244,25 +250,27 @@ class PostDAO(BaseDAO):
                 'status': 'error'
             }
 
+
 class TagDAO(BaseDAO):
     model = Tag
 
     @classmethod
-    async def add_tags(cls, session: AsyncSession, tag_names: list[str]) -> list[int]:
+    async def add_tags(cls, session: AsyncSession,
+                       tag_names: list[str]) -> list[int]:
         """
         Adds tags to the database.
 
         Args:
             session: Async SQLAlchemy session
             tag_name: List of tag names to add
-        
+
         Returns:
             List of tags id
         """
         tag_ids = []
         for tag_name in tag_names:
             # Only lower case is allowed
-            tag_name = tag_name.lower() 
+            tag_name = tag_name.lower()
 
             # Find tag in the db
             query = select(Tag).filter_by(name=tag_name)
@@ -278,25 +286,29 @@ class TagDAO(BaseDAO):
                 new_tag = Tag(name=tag_name)
                 session.add(new_tag)
                 try:
-                    await session.flush() 
-                    logger.info(f"Tag '{tag_name}' has been successfully added to the database.")
+                    await session.flush()
+                    logger.info(
+                        f"Tag '{tag_name}' has been successfully added to the database.")
                     tag_ids.append(new_tag.id)
 
                 except SQLAlchemyError as e:
                     await session.rollback()
-                    logger.error(f"Internal error occured while adding the tag '{tag_name}': {e}")
+                    logger.error(
+                        f"Internal error occured while adding the tag '{tag_name}': {e}")
                     raise e
 
         return tag_ids
+
 
 class PostTagDAO(BaseDAO):
     model = PostTag
 
     @classmethod
-    async def add_post_tags(cls, session: AsyncSession, post_tag_pairs: list[dict]) -> None:
+    async def add_post_tags(cls, session: AsyncSession,
+                            post_tag_pairs: list[dict]) -> None:
         """
         Method for multiple linkage post-tag in the database.
-        
+
         Args:
             session: Async SQLAlchemy session
             post_tag_pairs: List of dicts-pairs with keys 'post_id' and 'tag_id'
@@ -320,10 +332,12 @@ class PostTagDAO(BaseDAO):
 
         session.add_all(post_tag_insts)
         try:
-            await session.flush()  
-            logger.info(f"{len(post_tag_insts)} pairs post-tag successfully added.")
+            await session.flush()
+            logger.info(
+                f"{len(post_tag_insts)} pairs post-tag successfully added.")
 
         except SQLAlchemyError as e:
             await session.rollback()
-            logger.error(f"Internall error while addid pairs post-tag in database: {e}")
+            logger.error(
+                f"Internall error while addid pairs post-tag in database: {e}")
             raise e

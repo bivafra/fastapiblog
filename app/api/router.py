@@ -14,6 +14,7 @@ from app.exceptions import PostAlreadyExists
 
 router = APIRouter(prefix="/api", tags=["API"])
 
+
 @router.post("/posts", summary="Adding a new post with tags")
 async def add_post(
         add_data: SPostCreateBase,
@@ -25,7 +26,7 @@ async def add_post(
     tags = post_dict.pop("tags", [])
 
     try:
-        post = await PostDAO.add(session=session, 
+        post = await PostDAO.add(session=session,
                                  values=SPostCreateWithAuthor.model_validate(post_dict))
         post_id = post.id
 
@@ -34,9 +35,10 @@ async def add_post(
                                             tag_names=tags)
             await PostTagDAO.add_post_tags(session=session,
                                            post_tag_pairs=[{
-                                           "post_id": post_id, "tag_id": id }for id in tag_ids
+                                               "post_id": post_id, "tag_id": id}for id in tag_ids
                                            ])
-        return {"status": "success", "message": f"Post with ID {post_id} has been successfully added"}
+        return {"status": "success",
+                "message": f"Post with ID {post_id} has been successfully added"}
 
     except IntegrityError as e:
         if "UNIQUE constraint failed" in str(e.orig):

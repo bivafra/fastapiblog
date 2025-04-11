@@ -20,6 +20,7 @@ async def get_session_with_commit() -> AsyncGenerator[AsyncSession, None]:
         finally:
             await session.close()
 
+
 async def get_session_no_commit() -> AsyncGenerator[AsyncSession, None]:
     """
     Async session without automatic commit

@@ -6,12 +6,14 @@ from app.dependencies.dao_dep import get_session_no_commit
 from app.exceptions import CookieNotFound, ForbiddenException, UserNotFoundException
 from app.auth.models import User
 
+
 async def get_token_optional(request: Request) -> str | None:
     """
     Extract access_token from cookie header.
     If token doesn't exists - return None
     """
     return request.cookies.get("user_access_token")
+
 
 async def get_access_token(request: Request) -> str:
     """
@@ -38,7 +40,9 @@ async def get_current_user_optional(
     user = await UsersDAO.find_one_or_none_by_id(session=session, data_id=user_id)
     return user
 
+
 async def get_current_user() -> User:
+    """Returns current user ORM object."""
     user = await get_current_user_optional()
     if not user:
         raise UserNotFoundException
@@ -50,4 +54,3 @@ async def get_current_admin_user(cur_user: User = Depends(get_current_user)):
     if cur_user.role_id in [3, 4]:
         return cur_user
     raise ForbiddenException
-

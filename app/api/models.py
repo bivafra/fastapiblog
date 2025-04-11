@@ -15,7 +15,7 @@ class Post(Base):
     content: Mapped[str] = mapped_column(Text)
     # May be published or draft
     status: Mapped[str] = mapped_column(
-        default="published", server_default="published") 
+        default="published", server_default="published")
 
     author: Mapped[int] = mapped_column(ForeignKey("user.id"),
                                         nullable=False)
