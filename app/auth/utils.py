@@ -9,9 +9,10 @@ def set_cookie(response: Response, user_id: int) -> None:
         httponly=True
     )
 
+
 async def authenticate_user(user, password):
     """
-    Tries to authenticate given user's database obj and 
+    Tries to authenticate given user's database obj and
     entered password.
 
     Args:
@@ -25,4 +26,3 @@ async def authenticate_user(user, password):
     if not user or user.password != password:
         return None
     return user
-

@@ -17,7 +17,7 @@ ForbiddenException = HTTPException(
 
 IncorrectLoginOrPasswordException = HTTPException(
     status_code=status.HTTP_400_BAD_REQUEST,
-    detail ="Incorrect user login or password"
+    detail="Incorrect user login or password"
 )
 
 CookieNotFound = HTTPException(

@@ -22,11 +22,12 @@ def register_routers(app: FastAPI) -> None:
     @router_root.get("/", tags=["root"])
     def home_page():
         return {
-            "message" : "Homepage placeholder",
+            "message": "Homepage placeholder",
             "author": "bivafra"
         }
     app.include_router(router_root, tags=["root"])
     app.include_router(router_auth, prefix='/auth', tags=['Auth'])
+
 
 def init_app() -> FastAPI:
     """
@@ -35,7 +36,6 @@ def init_app() -> FastAPI:
         Configured FastAPI app
     """
     app = FastAPI(lifespan=lifespan)
-
 
     # Allow backend communicate with JS from different origin
     app.add_middleware(
@@ -46,7 +46,7 @@ def init_app() -> FastAPI:
         allow_headers=["*"]
     )
 
-    # app.mount("/static", 
+    # app.mount("/static",
     #           StaticFiles(directory="static"),
     #           name="static"
     #           )
@@ -55,4 +55,4 @@ def init_app() -> FastAPI:
     return app
 
 
-app = init_app() 
+app = init_app()

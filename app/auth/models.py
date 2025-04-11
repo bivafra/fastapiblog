@@ -14,7 +14,7 @@ class Role(Base):
 class User(Base):
     name: Mapped[str_uniq]
     password: Mapped[str]
-    role_id: Mapped[int] = mapped_column(ForeignKey('role.id'), default=1, 
+    role_id: Mapped[int] = mapped_column(ForeignKey('role.id'), default=1,
                                          server_default=text("1"))
     role: Mapped["Role"] = relationship(back_populates="user", lazy="joined")
 

@@ -12,6 +12,7 @@ from app.dependencies.auth_dep import get_current_admin_user, get_current_user
 
 router = APIRouter()
 
+
 @router.post("/register")
 async def register_user(user_data: SUserRegister,
                         session: AsyncSession = Depends(get_session_with_commit)) -> dict:
@@ -29,7 +30,7 @@ async def register_user(user_data: SUserRegister,
 
     await user_dao.add(values=SUserAddDB(**user_data_dict))
 
-    return {"message" : "You were successfully registered"}
+    return {"message": "You were successfully registered"}
 
 
 @router.post("/login")
@@ -41,7 +42,7 @@ async def auth_user(
     Checks correctness of entered data and set cookie for authentication
     """
     user_dao = UsersDAO(session)
-    user = await user_dao.find_one_or_none( 
+    user = await user_dao.find_one_or_none(
         filters=UserBase(name=user_data.name)
     )
 
@@ -54,20 +55,22 @@ async def auth_user(
         "message": "Successful authorization"
     }
 
+
 @router.post("/logout")
 async def logout(response: Response):
     """
     Removes cookie from response
     """
     response.delete_cookie("user_access_token")
-    return {"message" : "Successfully logout"}
+    return {"message": "Successfully logout"}
+
 
 @router.get("/me/")
 async def get_me(user_data: User = Depends(get_current_user)) -> SUserInfo:
     return SUserInfo.model_validate(user_data)
 
+
 @router.get("/all_users")
 async def get_all_users(session: AsyncSession = Depends(get_session_no_commit),
                         user_data: User = Depends(get_current_admin_user)):
     return await UsersDAO(session).find_all()
-
