@@ -10,7 +10,8 @@ from alembic import context
 from app.config import database_url
 
 from app.dao.database import Base
-from app.auth.models import Role, User
+from app.auth.models import Role, User  
+from app.api.models import Tag, Post, PostTag
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
