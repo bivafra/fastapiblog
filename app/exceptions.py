@@ -24,3 +24,8 @@ CookieNotFound = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
     detail="Invalid cookie"
 )
+
+PostAlreadyExists = HTTPException(
+    status_code=status.HTTP_409_CONFLICT,
+    detail="Post with the same title already exists"
+)

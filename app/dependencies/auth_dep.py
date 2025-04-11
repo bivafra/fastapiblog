@@ -21,7 +21,7 @@ async def get_current_user(
 ) -> User:
     """Checks whether current user is registered"""
     user_id = int(token)
-    user = await UsersDAO(session).find_one_or_none_by_id(user_id)
+    user = await UsersDAO.find_one_or_none_by_id(session=session, data_id=user_id)
     if not user: 
         raise UserNotFoundException
     return user

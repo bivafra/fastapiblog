@@ -3,7 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI, APIRouter
 from loguru import logger
+
 from app.auth.router import router as router_auth
+from app.api.router import router as router_api
 
 
 @asynccontextmanager
@@ -26,7 +28,8 @@ def register_routers(app: FastAPI) -> None:
             "author": "bivafra"
         }
     app.include_router(router_root, tags=["root"])
-    app.include_router(router_auth, prefix='/auth', tags=['Auth'])
+    app.include_router(router_auth)
+    app.include_router(router_api)
 
 
 def init_app() -> FastAPI:

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Response, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import session
 
 from app.auth.dao import UsersDAO
 from app.auth.schemas import SUserAddDB, SUserAuth, SUserRegister, UserBase, SUserInfo
@@ -10,7 +9,7 @@ from app.exceptions import IncorrectLoginOrPasswordException, UserAlreadyExistsE
 from app.auth.utils import authenticate_user, set_cookie
 from app.dependencies.auth_dep import get_current_admin_user, get_current_user
 
-router = APIRouter()
+router = APIRouter(prefix='/auth', tags=['Auth'])
 
 
 @router.post("/register")
@@ -46,7 +45,7 @@ async def auth_user(
         filters=UserBase(name=user_data.name)
     )
 
-    if not user and not await authenticate_user(user=user, password=user_data.password):
+    if not user or not await authenticate_user(user=user, password=user_data.password):
         raise IncorrectLoginOrPasswordException
 
     set_cookie(response, user.id)

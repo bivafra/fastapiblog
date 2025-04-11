@@ -13,16 +13,17 @@ class Post(Base):
     description: Mapped[str] = mapped_column(Text)
 
     content: Mapped[str] = mapped_column(Text)
+    # May be published or draft
     status: Mapped[str] = mapped_column(
-        default="published", server_default="published")
+        default="published", server_default="published") 
 
     author: Mapped[int] = mapped_column(ForeignKey("user.id"),
                                         nullable=False)
-    user: Mapped["User"] = relationship(back_populates="post")
+    user: Mapped["User"] = relationship(back_populates="posts")
 
     tags: Mapped[list["Tag"]] = relationship(
-        secondary="post_tag",
-        back_populates="post"
+        secondary="posttag",
+        back_populates="posts"
     )
 
 
@@ -30,15 +31,14 @@ class Tag(Base):
     name: Mapped[str] = mapped_column(String(20), unique=True)
 
     posts: Mapped[list["Post"]] = relationship(
-        secondary="post_tag",
-        back_populates="tag"
+        secondary="posttag",
+        back_populates="tags"
     )
 
 
 class PostTag(Base):
     post_id: Mapped[int] = mapped_column(
-        ForeignKey("post.id"),
-        ondelete="CASCADE",
+        ForeignKey("post.id", ondelete="CASCADE"),
         nullable=False)
     tag_id: Mapped[int] = mapped_column(
         ForeignKey(
@@ -47,5 +47,5 @@ class PostTag(Base):
         nullable=False)
 
     __table_args__ = (
-        UniqueConstraint("post_id", "tag_id", name="uq_post_tag")
+        UniqueConstraint("post_id", "tag_id", name="uq_post_tag"),
     )
