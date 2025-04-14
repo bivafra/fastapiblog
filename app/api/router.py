@@ -58,7 +58,7 @@ async def get_post(
 
 
 @router.get("/posts", summary="Get all published posts")
-async def get_all_posts(
+async def get_posts(
     author_id: int | None = None,
     tag: str | None = None,
     page: int = Query(default=1, ge=1, description="Page number"),

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ article.title }}</title>
+        <link href="/static/style/post.css" rel="stylesheet">
+    </head>
+    <body>
+        <article class="article-container"
+                 data-post-id="{{ article.id }}"
+                 data-post-status="{{ article.status }}"
+                 data-post-author="{{ article.author }}">
+            <h1 class="article-title">{{ article.title }}</h1>
+            <div class="article-meta">
+                <a href="/posts?author_id={{ article.author }}">{{ article.author_name }}</a> •
+                {{ article.created_at.strftime('%d %B %Y') }}
+            </div>
+            <div class="article-content">
+                {{ article.content|safe }}
+            </div>
+            <div class="tags-container">
+                {% if article.tags %}
+                <ul class="tags">
+                    {% for tag in article.tags %}
+                    <li><a href="/posts?tag={{ tag.name }}" class="tag">{{ tag.name }}</a></li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>Not tags for this post.</p>
+                {% endif %}
+            </div>
+            {% if current_user_id == article.author %}
+            <div class="article-actions">
+                {% if article.status == 'published' %}
+                <button class="button status-button" data-action="change-status" data-new-status="draft">
+                    Move to drafts
+                </button>
+                {% else %}
+                <button class="button status-button" data-action="change-status" data-new-status="published">
+                    Publish
+                </button>
+                {% endif %}
+                <button class="button delete-button" data-action="delete">Delete post</button>
+            </div>
+            {% endif %}
+        </article>
+
+        <div class="view-posts">
+            <a href="/posts" class="button view-posts-button">See all posts</a>
+        </div>
+
+        <script src="/static/js/post.js"></script>
+    </body>
+</html>
