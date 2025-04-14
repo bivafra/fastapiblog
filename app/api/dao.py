@@ -5,7 +5,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
-from app.api.shemas import PostFullResponce
+from app.api.shemas import PostFullResponse
 from app.dao.base import BaseDAO
 from app.api.models import Post, Tag, PostTag
 
@@ -74,7 +74,7 @@ class PostDAO(BaseDAO):
         # Perfom constructed query
         result = await session.execute(paginated_query)
         posts = result.scalars().all()
-        posts = [PostFullResponce.model_validate(post) for post in posts]
+        posts = [PostFullResponse.model_validate(post) for post in posts]
 
         # Loggin
         filters = []
@@ -124,7 +124,7 @@ class PostDAO(BaseDAO):
             }
 
         # Check whether user is the author in casee of draft
-        if post.status == "draft" and (user_id != post.author):
+        if post.status == "draft" and user_id != post.author:
             return {
                 "message": "This post is a draft and only authors have access to it",
                 "status": "error"
