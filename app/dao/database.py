@@ -1,35 +1,37 @@
 import uuid
-from decimal import Decimal 
+from decimal import Decimal
 
 from typing import Annotated
 from datetime import datetime
 from sqlalchemy import func, TIMESTAMP, Integer, inspect
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, declared_attr
-from sqlalchemy.ext.asyncio import (AsyncAttrs, async_sessionmaker, 
+from sqlalchemy.ext.asyncio import (AsyncAttrs, async_sessionmaker,
                                     create_async_engine, AsyncSession)
 
 from app.config import database_url
 
 engine = create_async_engine(url=database_url)
-async_session_maker = async_sessionmaker(engine, class_=AsyncSession, 
+async_session_maker = async_sessionmaker(engine, class_=AsyncSession,
                                          expire_on_commit=False)
-int_uniq = Annotated[int, 
+int_uniq = Annotated[int,
                      mapped_column(primary_key=True, autoincrement=True)]
-str_uniq = Annotated[str, 
+str_uniq = Annotated[str,
                      mapped_column(unique=True, nullable=False)]
+
 
 class Base(AsyncAttrs, DeclarativeBase):
     # Sqlalchemy feature. This class won't be mapped to database
     __abstract__ = True
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(
+        Integer, primary_key=True, autoincrement=True)
 
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, 
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP,
                                                  server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(TIMESTAMP, 
-                                                 server_default=func.now(), 
+    updated_at: Mapped[datetime] = mapped_column(TIMESTAMP,
+                                                 server_default=func.now(),
                                                  onupdate=func.now())
-    
+
     @declared_attr
     def __tablename__(cls):
         return cls.__name__.lower()
@@ -64,4 +66,3 @@ class Base(AsyncAttrs, DeclarativeBase):
                 result[column.key] = value
 
         return result
-
