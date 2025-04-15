@@ -43,11 +43,11 @@
             <a href="?page={{ article.page - 1 }}{% if filters.author_id %}&author_id={{ filters.author_id }}{% endif %}{% if filters.tag %}&tag={{ filters.tag }}{% endif %}"
                class="pagination-link">←</a>
             {% endif %}
-            {% for p in range(1, article.total_page + 1) %}
+            {% for p in range(1, article.total_pages + 1) %}
             <a href="?page={{ p }}{% if filters.author_id %}&author_id={{ filters.author_id }}{% endif %}{% if filters.tag %}&tag={{ filters.tag }}{% endif %}"
                class="pagination-link {% if p == article.page %}active{% endif %}">{{ p }}</a>
             {% endfor %}
-            {% if article.page < article.total_page %}
+            {% if article.page < article.total_pages %}
             <a href="?page={{ article.page + 1 }}{% if filters.author_id %}&author_id={{ filters.author_id }}{% endif %}{% if filters.tag %}&tag={{ filters.tag }}{% endif %}"
                class="pagination-link">→</a>
             {% endif %}

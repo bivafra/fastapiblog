@@ -1,10 +1,10 @@
-function getCookie(name) {
-    return document.cookie
-        .split(';')
-        .map(cookie =&gt; cookie.trim())
-        .find(cookie =&gt; cookie.startsWith(`${name}=`))
-        ?.split('=')[1] || null;
-}
+// function getCookie(name) {
+//     return document.cookie
+//         .split(';')
+//         .map(cookie =&gt; cookie.trim())
+//         .find(cookie =&gt; cookie.startsWith(`${name}=`))
+//         ?.split('=')[1] || null;
+// }
 
 async function sendRequest(url, method, body = null) {
     const headers = {
@@ -52,7 +52,7 @@ async function deletePost({id}) {
 }
 
 
-async function changeBlogStatus({id, jwtToken}, newStatus) {
+async function changePostStatus({id}, newStatus) {
     try {
         const url = `/api/posts/${id}?new_status=${encodeURIComponent(newStatus)}`;
         await sendRequest(url, 'PATCH', null);
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () =&gt; {
         id: articleContainer.dataset.postId,
         status: articleContainer.dataset.postStatus,
         author: articleContainer.dataset.postAuthor,
-        token: getCookie('user_access_token'),
+        // token: getCookie('user_access_token'),
     };
 
     console.log('POST_DATA:', POST_DATA);
