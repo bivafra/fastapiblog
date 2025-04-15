@@ -44,7 +44,7 @@ async function sendRequest(url, method, body = null) {
 async function deletePost({id}) {
     try {
         await sendRequest(`/api/posts/${id}`, 'DELETE', null);
-        alert('Post successfully added. Redirecting...');
+        alert('Post successfully deleted. Redirecting...');
         window.location.href = '/posts';
     } catch (error) {
         console.error('Error occured while creating post:', error);
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteButton = document.querySelector('[data-action="delete"]');
     if (deleteButton) {
         deleteButton.addEventListener('click', () => {
-            if (confirm('Do you indeed want to delete this post')) {
+            if (confirm('Do you indeed want to delete this post?')) {
                 deletePost(POST_DATA);
             }
         });
