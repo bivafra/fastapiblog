@@ -19,7 +19,7 @@ async def get_access_token(request: Request) -> str:
     """
     Extract access_token from cookie header
     """
-    token = await get_token_optional(request)
+    token = request.cookies.get("user_access_token")    
     if not token:
         raise CookieNotFound
     return token
@@ -41,9 +41,8 @@ async def get_current_user_optional(
     return user
 
 
-async def get_current_user() -> User:
+async def get_current_user(user: User | None = Depends(get_current_user_optional)) -> User:
     """Returns current user ORM object."""
-    user = await get_current_user_optional()
     if not user:
         raise UserNotFoundException
     return user

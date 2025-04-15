@@ -12,7 +12,7 @@ from app.dependencies.dao_dep import get_session_no_commit, get_session_with_com
 from app.dependencies.post_dep import get_post_info
 from app.exceptions import PostAlreadyExists
 
-router = APIRouter(prefix="/api", tags=["API"])
+router = APIRouter(prefix="/api", tags=["Posts"])
 
 
 @router.post("/posts", summary="Add a new post with tags")
