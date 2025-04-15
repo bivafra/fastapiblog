@@ -1,8 +1,8 @@
 // function getCookie(name) {
 //     return document.cookie
 //         .split(';')
-//         .map(cookie =&gt; cookie.trim())
-//         .find(cookie =&gt; cookie.startsWith(`${name}=`))
+//         .map(cookie => cookie.trim())
+//         .find(cookie => cookie.startsWith(`${name}=`))
 //         ?.split('=')[1] || null;
 // }
 
@@ -65,7 +65,7 @@ async function changePostStatus({id}, newStatus) {
 }
 
 
-document.addEventListener('DOMContentLoaded', () =&gt; {
+document.addEventListener('DOMContentLoaded', () => {
     const articleContainer = document.querySelector('.article-container');
     if (!articleContainer) {
         console.error('Element .article-container not found. Ensure it exists in DOM.');
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () =&gt; {
 
     const deleteButton = document.querySelector('[data-action="delete"]');
     if (deleteButton) {
-        deleteButton.addEventListener('click', () =&gt; {
+        deleteButton.addEventListener('click', () => {
             if (confirm('Do you indeed want to delete this post')) {
                 deletePost(POST_DATA);
             }
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () =&gt; {
 
     const statusButton = document.querySelector('[data-action="change-status"]');
     if (statusButton) {
-        statusButton.addEventListener('click', () =&gt; {
+        statusButton.addEventListener('click', () => {
             const newStatus = statusButton.dataset.newStatus;
             changePostStatus(POST_DATA, newStatus);
         });
