@@ -40,7 +40,7 @@ def init_app() -> FastAPI:
     Returns:
         Configured FastAPI app
     """
-    app = FastAPI(lifespan=lifespan)
+    app = FastAPI(lifespan=lifespan, docs_url="/api")
 
     # Allow backend communicate with JS from different origin
     app.add_middleware(
