@@ -63,8 +63,8 @@ async def get_posts(
     tag: str | None = None,
     page: int = Query(default=1, ge=1, description="Page number"),
     page_size: int = Query(
-        default=10,
-        ge=10,
+        default=3,
+        ge=3,
         le=100,
         description="Posts in a page"),
     session: AsyncSession = Depends(get_session_no_commit)

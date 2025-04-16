@@ -2,12 +2,10 @@ from fastapi import APIRouter, Response, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.dao import UsersDAO
-from app.auth.schemas import SUserAddDB, SUserAuth, SUserRegister, UserBase, SUserInfo
-from app.auth.models import User
+from app.auth.schemas import SUserAddDB, SUserAuth, SUserRegister, UserBase
 from app.dependencies.dao_dep import get_session_no_commit, get_session_with_commit
 from app.exceptions import IncorrectLoginOrPasswordException, UserAlreadyExistsException
 from app.auth.utils import authenticate_user, set_cookie
-from app.dependencies.auth_dep import get_current_admin_user, get_current_user
 
 router = APIRouter(prefix='/auth', tags=['Auth'])
 
@@ -64,12 +62,12 @@ async def logout(response: Response):
     return {"message": "Successfully logout"}
 
 
-@router.get("/me/")
-async def get_me(user_data: User = Depends(get_current_user)) -> SUserInfo:
-    return SUserInfo.model_validate(user_data)
+# @router.get("/me/")
+# async def get_me(user_data: User = Depends(get_current_user)) -> SUserInfo:
+#     return SUserInfo.model_validate(user_data)
 
 
-@router.get("/all_users")
-async def get_all_users(session: AsyncSession = Depends(get_session_no_commit),
-                        user_data: User = Depends(get_current_admin_user)):
-    return await UsersDAO.find_all(session=session)
+# @router.get("/all_users")
+# async def get_all_users(session: AsyncSession = Depends(get_session_no_commit),
+#                         user_data: User = Depends(get_current_admin_user)):
+#     return await UsersDAO.find_all(session=session)
