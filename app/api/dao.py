@@ -15,7 +15,7 @@ class PostDAO(BaseDAO):
 
     @classmethod
     async def get_post_list(cls, session: AsyncSession, author_id: Optional[int] = None, tag: Optional[str] = None,
-                            page: int = 1, page_size: int = 10) -> dict:
+                            page: int = 1, page_size: int = 3) -> dict:
         """
         Obtains list of published posts with optional filters and paging.
 
@@ -34,7 +34,7 @@ class PostDAO(BaseDAO):
         page = max(1, page)
 
         # load tables
-        base_query = select(Post).options(
+        base_query = select(Post).distinct().options(
             joinedload(Post.user),
             selectinload(Post.tags)
         ).filter_by(status="published")
